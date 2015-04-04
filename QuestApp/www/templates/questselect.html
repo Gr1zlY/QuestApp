@@ -10,7 +10,7 @@
 
     <ion-content>
         <div class="list">
-            <a ng-repeat="item in quests" class="item item-thumbnail-left" ui-sref="teamselect({questId: item.id})">
+            <a ng-repeat="item in quests" class="item item-thumbnail-left" ui-sref="teamselect({questId: item.questId})">
                 <img src="{{ item.image }}">
                 <h2>{{ item.name }}</h2>
                 <p>{{ item.description }}</p>

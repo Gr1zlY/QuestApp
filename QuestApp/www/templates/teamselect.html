@@ -10,7 +10,7 @@
 
     <ion-content>
         <div class="list">
-            <a ng-repeat="item in teams" class="item item-icon-left" ui-sref="teamselect({quest: item.questId})">
+            <a ng-repeat="item in teams" class="item item-icon-left" ng-click="teamselected({{item.teamId}})">
                 <i class=""></i>
                 {{ item.name }}
             </a>

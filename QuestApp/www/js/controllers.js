@@ -14,9 +14,9 @@ angular.module('quest.controllers', [])
     $scope.refreshdata();
 }])
 
-.controller('TeamSelectCtrl', ['$scope','$routeParams', function($scope, $routeParams) {
+.controller('TeamSelectCtrl', ['$scope','$state', '$stateParams', function($scope, $state, $stateParams) {
 
-    var questId = $routeParams.questId;
+    //var questId = $routeParams.questId;
 
     $scope.teams = [
         {teamId: 1, name: "ugly"},
@@ -24,20 +24,41 @@ angular.module('quest.controllers', [])
     ];
 
     $scope.refreshdata = function(){
-
-    
+        //pull data from server
     }
 
     $scope.refreshdata();
 
+    $scope.teamselected = function(teamId){
+        //send get to save
+        //send with device id
+        console.log(teamId);
+        $state.go("questinfo", {});
+    }
+
 }])
 
 .controller('QuestInfoCtrl', ['$scope','$rootScope', function($scope, $rootScope) {
+
+    $scope.quest = {questId: 1, name: "Blah quest", description: "desc", photo: null};
+
+    $scope.quest.tasks = [
+        {taskId: 1, name: "mastrubate", status: true},
+        {taskId: 2, name: "mastrubate more", status: false}
+    ];
 
     $scope.refreshdata = function(){
     
     }
 
     $scope.refreshdata();
+}])
 
+.controller('TaskInfoCtrl', ['$scope', function($scope) {
+
+    $scope.refreshdata = function(){
+    
+    }
+
+    $scope.refreshdata();
 }]);

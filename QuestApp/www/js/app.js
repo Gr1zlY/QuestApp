@@ -14,14 +14,14 @@ angular.module('quest', ['ionic', 'quest.controllers'])
             controller: 'QuestSelectCtrl'
         })  
         .state('teamselect', {
-            url: "/teamselect/:quest",
+            url: "/teamselect/:questId",
             templateUrl: "templates/teamselect.html",
             controller: 'TeamSelectCtrl'
         })
         .state('questinfo', {
             url: "/questinfo",
-            templateUrl: "templates/teamselect.html",
-            controller: 'TeamSelectCtrl'
+            templateUrl: "templates/questview.html",
+            controller: 'QuestInfoCtrl'
         });
 
     $urlRouterProvider.otherwise('/questselect');
