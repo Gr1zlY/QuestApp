@@ -1,21 +1,28 @@
 angular.module('quest.controllers', [])
 
-.controller('QuestSelectCtrl', ['$scope','$rootScope', '$http', function($scope, $rootScope, $http) {
+.controller('QuestSelectCtrl', ['$scope','$rootScope', '$http', '$ionicPopup', function($scope, $rootScope, $http, $ionicPopup) {
 
     $scope.quests = [];
-        //{questId: 1, name: "ugly", description: "ugly", photo: null},
-        //{questId: 2, name: "ugly 2", description: "ugly 2", photo: null}
     
     $scope.refreshdata = function(){
 
         $http.get("http://192.168.20.38:8087/getQuests").then(
             function(responce){
-                //console.log(responce);
                 $scope.quests = responce.data;
             },
             function(error){
                 console.log(error);
-                //TODO: arr retry
+
+                var confirmPopup = $ionicPopup.confirm({
+                    title: 'Network Error',
+                    template: 'Try again?'
+                });
+
+                confirmPopup.then(function(res){
+                    if(res){
+                        $scope.refreshdata();
+                    }
+                });
             }
         );
     }
@@ -28,12 +35,9 @@ angular.module('quest.controllers', [])
     var questId = $stateParams.questId;
 
     $scope.teams = [];
-        //{teamId: 1, name: "ugly"},
-        //{teamId: 2, name: "ugly 2"}
-
 
     $scope.refreshdata = function(){
-        //pull data from server
+
         $http.get("http://192.168.20.38:8087/getTeams", {params: {"questId":questId}}).then(
             function(responce){
                 console.log(responce);
@@ -41,6 +45,17 @@ angular.module('quest.controllers', [])
             },
             function(error){
                 console.log(error);
+
+                var confirmPopup = $ionicPopup.confirm({
+                    title: 'Network Error',
+                    template: 'Try again?'
+                });
+
+                confirmPopup.then(function(res){
+                    if(res){
+                        $scope.refreshdata();
+                    }
+                });
             }
         );
     }
@@ -56,14 +71,18 @@ angular.module('quest.controllers', [])
     }
 
     $scope.teamselected = function(teamId){
-        //send get to save
-        //send with device id
-        console.log(teamId);
-        $state.go("questinfo", {});
+
+        $http.get("http://192.168.20.38:8087/joinTeam", {params: {"teamId":teamId, "deviceId": deviceId}}).then(
+            function(responce){
+                $state.go("questinfo", {});
+            },
+            function(error){
+                console.log(error);
+            }
+        );
     }
 
     $scope.team = {};
-
     $scope.createteam = function(){
         var teamPopup = $ionicPopup.show({
             template: '<input type="text" ng-model="team.name" />',
@@ -76,35 +95,42 @@ angular.module('quest.controllers', [])
                     onTap: function(e){
                         if(!$scope.team.name){
                             e.preventDefault();
-                            //TODO: cleanup
                         } else {
-                            return $scope.team.name;
+                            $http({
+                                url: "http://192.168.20.38:8087/createTeam",
+                                type: "GET",
+                                params: {"questId":questId, "deviceId" : deviceId, "name": $scope.team.name}
+                            }).then(
+                                function(responce){
+                                    console.log(responce);
+                                    if(responce.data.status.localeCompare("OK") == 0){
+                                        $state.go("questinfo", {});
+                                    }
+                                },
+                                function(error){
+                                    console.log(error);
+                                    e.preventDefault();
+                                }
+                            );
                         }
                     }
                 }
             ]
         });
-        teamPopup.then(function(result){
-            if(result !== null){
-                $http.get("http://192.168.20.38:8087/createTeam", {params: {"questId":questId, "deviceId" : deviceId, "name": $scope.team.name}}).then(
-                    function(responce){
-                        console.log(responce);
-                        //$scope.teams = responce.data;
-                    },
-                    function(error){
-                        console.log(error);
-                    }
-                );
-            }
-        });
-    
     }
-
 }])
 
-.controller('QuestInfoCtrl', ['$scope','$rootScope', function($scope, $rootScope) {
+.controller('QuestInfoCtrl', ['$scope','$rootScope', '$http', '$ionicPopup', function($scope, $rootScope, $http, $ionicPopup) {
 
-    $scope.quest = {questId: 1, name: "Blah quest", description: "desc", photo: null};
+    //TODO: creanup
+    var deviceId = '';
+    if(typeof device !== 'undefined'){
+        deviceId = device.uuid;
+    } else {
+        deviceId = 'browser';
+    }
+
+    $scope.quest = {};
 
     $scope.quest.tasks = [
         {taskId: 1, name: "mastrubate", status: true},
@@ -112,13 +138,20 @@ angular.module('quest.controllers', [])
     ];
 
     $scope.refreshdata = function(){
-    
+        $http.get("http://192.168.20.38:8087/getQuestByDeviceId", {params: {"deviceId":deviceId}}).then(
+            function(responce){
+                $scope.quest = responce.data;
+            },
+            function(error){
+                console.log(error);
+            }
+        );
     }
 
     $scope.refreshdata();
 }])
 
-.controller('TaskInfoCtrl', ['$scope', '$stateParams', '$ionicLoading', function($scope, $stateParams, $ionicLoading) {
+.controller('TaskInfoCtrl', ['$scope', '$stateParams', '$ionicLoading', '$ionicPopup', function($scope, $stateParams, $ionicLoading, $ionicPopup) {
 
     console.log($stateParams.taskId);
 
@@ -139,28 +172,32 @@ angular.module('quest.controllers', [])
     }
     
     var submit = function(value){
-        $scope.loading();
-        setTimeout($scope.endloading(), 10000);
+        //$scope.loading();
+
+        /*$http.get("http://192.168.20.38:8087/getQuestByDeviceId", {params: {"deviceId":deviceId}}).then(
+            function(responce){
+                $scope.quest = responce.data;
+            },
+            function(error){
+                console.log(error);
+            }
+        );*/
     }
 
     $scope.getlocation = function(){
-        //$scope.loading();
-
         navigator.geolocation.getCurrentPosition(
-                function(result){
-                    submit({type: "geo", data: result});
-                },
-                function(error){
-                    alert(error.code+ error.message + ' check your location settings');
-                });
+            function(result){
+                submit({type: "geo", data: result});
+            },
+            function(error){
+                alert(error.code+ error.message + ' check your location settings');
+            }
+        );
     }
     
     $scope.scanqrcode = function(){
-        alert('blah');
         cordova.plugins.barcodeScanner.scan(
                 function(result){
-                    //alert(result.text);
-                    //send result
                     submit({type: "qr", data: result});
                 }, 
                 function(error){
@@ -169,7 +206,26 @@ angular.module('quest.controllers', [])
             );    
     }
 
+    $scope.str.solution = {};
     $scope.enterstring = function(){
+        var solutionPopup = $ionicPopup.show({
+            template: '<input type="text" ng-model="str.solution" />',
+            title: 'Enter tast solution',
+            scope: $scope,
+            buttons: [
+                {text: 'Cancel'},
+                {text: '<b>Check</b>',
+                    type: 'button-positive',
+                    onTap: function(e){
+                        if(!$scope.str.solution){
+                            e.preventDefault();
+                        } else {
+                            submit({type: "string", data: $scope.str.solution});
+                        }
+                    }
+                }
+            ]
+        });
     
     }
 

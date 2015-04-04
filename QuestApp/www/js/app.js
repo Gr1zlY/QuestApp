@@ -12,7 +12,8 @@ angular.module('quest', ['ionic', 'quest.controllers'])
         .state('teamselect', {
             url: "/teamselect/:questId",
             templateUrl: "templates/teamselect.html",
-            controller: 'TeamSelectCtrl'
+            controller: 'TeamSelectCtrl',
+            cache: false
         })
         .state('questinfo', {
             url: "/questinfo",
