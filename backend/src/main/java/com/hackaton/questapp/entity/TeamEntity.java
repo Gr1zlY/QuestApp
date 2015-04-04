@@ -1,15 +1,29 @@
 package com.hackaton.questapp.entity;
 
+import javax.persistence.*;
+
 /**
  * Created by Sheremeta on 04.04.2015.
  */
+/*
+@Entity
+@Table(name = "Team")*/
 public class TeamEntity {
 
+/*    @Id
+    @Column(name = "teamId")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)*/
     private Long teamId;
 
     private String name;
 
     private QuestEntity quest;
+
+    public TeamEntity(Long teamId, String name, QuestEntity quest) {
+        this.teamId = teamId;
+        this.name = name;
+        this.quest = quest;
+    }
 
     public Long getTeamId() {
         return teamId;
@@ -57,7 +71,7 @@ public class TeamEntity {
         return "TeamEntity{" +
                 "teamId=" + teamId +
                 ", name='" + name + '\'' +
-                ", quest=" + quest +
+         //       ", quest=" + quest +
                 '}';
     }
 }

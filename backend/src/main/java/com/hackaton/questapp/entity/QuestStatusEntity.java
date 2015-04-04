@@ -1,8 +1,13 @@
 package com.hackaton.questapp.entity;
 
+
+
 /**
  * Created by Sheremeta on 04.04.2015.
  */
+
+/*@Entity
+@Table(name = "QuestStatus")*/
 public class QuestStatusEntity {
 
     private TeamEntity team;

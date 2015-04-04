@@ -1,10 +1,19 @@
 package com.hackaton.questapp.entity;
 
+import javax.persistence.*;
+
 /**
  * Created by Sheremeta on 04.04.2015.
  */
+
+/*@Entity
+@Table(name = "Team")*/
 public class TeamMemberEntity {
 
+
+   /* @Id
+    @Column(name = "memberId")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)*/
     private Long memberId;
 
     private TeamEntity team;
