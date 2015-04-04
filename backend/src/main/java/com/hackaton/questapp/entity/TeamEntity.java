@@ -11,6 +11,12 @@ public class TeamEntity {
 
     private QuestEntity quest;
 
+    public TeamEntity(Long teamId, String name, QuestEntity quest) {
+        this.teamId = teamId;
+        this.name = name;
+        this.quest = quest;
+    }
+
     public Long getTeamId() {
         return teamId;
     }
@@ -57,7 +63,7 @@ public class TeamEntity {
         return "TeamEntity{" +
                 "teamId=" + teamId +
                 ", name='" + name + '\'' +
-                ", quest=" + quest +
+         //       ", quest=" + quest +
                 '}';
     }
 }

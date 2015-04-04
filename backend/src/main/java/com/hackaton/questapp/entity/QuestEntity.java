@@ -19,6 +19,15 @@ public class QuestEntity {
 
     private Long time;
 
+    public QuestEntity(Long id, String name, String description, byte[] photo, OrganizatorUser creator, Long time) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.photo = photo;
+        this.creator = creator;
+        this.time = time;
+    }
+
     public Long getId() {
         return id;
     }

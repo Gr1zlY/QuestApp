@@ -11,6 +11,12 @@ public class OrganizatorUser {
 
     private String password; // plainText for now
 
+    public OrganizatorUser(Long userId, String login, String password) {
+        this.userId = userId;
+        this.login = login;
+        this.password = password;
+    }
+
     public Long getUserId() {
         return userId;
     }
