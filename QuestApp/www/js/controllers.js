@@ -54,15 +54,61 @@ angular.module('quest.controllers', [])
     $scope.refreshdata();
 }])
 
-.controller('TaskInfoCtrl', ['$scope', '$stateParams',function($scope, $stateParams) {
+.controller('TaskInfoCtrl', ['$scope', '$stateParams', '$ionicLoading', function($scope, $stateParams, $ionicLoading) {
 
     console.log($stateParams.taskId);
 
-    $scope.task = {taskId: 2, name: 'Task 1', description: 'asdfasdfasdf', photo: null};
+    $scope.task = {taskId: 2, name: 'Task 1', description: 'asdfasdfasdf', photo: null, status: false};
 
     $scope.refreshdata = function(){
     
     }
 
+    $scope.loading = function(){
+        $ionicLoading.show({
+            template: '<ion-spinner></ion-spinner>'
+        });
+    }
+
+    $scope.endloading = function(){
+        $ionicLoading.hide();
+    }
+    
+    var submit = function(value){
+        $scope.loading();
+        setTimeout($scope.endloading(), 10000);
+    }
+
+    $scope.getlocation = function(){
+        //$scope.loading();
+
+        navigator.geolocation.getCurrentPosition(
+                function(result){
+                    submit({type: "geo", data: result});
+                },
+                function(error){
+                    alert('check your location settings');
+                });
+    }
+    
+    $scope.scanqrcode = function(){
+        alert('blah');
+        cordova.plugins.barcodeScanner.scan(
+                function(result){
+                    //alert(result.text);
+                    //send result
+                    submit({type: "qr", data: result});
+                }, 
+                function(error){
+                    alert("no code");
+                }
+            );    
+    }
+
+    $scope.enterstring = function(){
+    
+    }
+
     $scope.refreshdata();
+
 }]);
