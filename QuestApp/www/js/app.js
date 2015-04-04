@@ -5,6 +5,25 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('starter', ['ionic'])
 
+.config(function($stateProvider, $urlRouterProvider, $compileProvider){
+    $stateProvider
+        .state('questselect', {
+            url: "/questselect",
+            views: {
+                templateUrl: "templates/questselect.html",
+                controller: 'QuestSelectCtrl'
+            }
+        })  
+        .state('teamselect', {
+            url: "/teamselect",
+            views: {
+                templateUrl: "templates/teamselect.html",
+                controller: 'TeamSelectCtrl'
+            }
+        })  
+    
+})
+
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
