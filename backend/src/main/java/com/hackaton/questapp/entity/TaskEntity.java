@@ -48,6 +48,14 @@ public class TaskEntity {
         this.taskId = taskId;
     }
 
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
+    }
+
     public QuestEntity getQuest() {
         return quest;
     }
