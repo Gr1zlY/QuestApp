@@ -3,6 +3,4 @@
 *.swp
 *.swo
 #end vim temp
-node_modules/*
-topcoat-0.8.0/*
-filestest/*
+
