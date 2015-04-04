@@ -1,0 +1,23 @@
+<ion-view view-title="Select teams">
+
+    <ion-nav-title class="bar-stable">
+        <h1 class="title">Select Teams</h1>
+    </ion-nav-title>
+    <ion-nav-buttons side="right">
+        <button class="button button-icon button-clear ion-loop" ng-click="refreshdata()">
+        </button>
+    </ion-nav-buttons>
+
+    <ion-content>
+        <div class="list">
+            <a ng-repeat="item in teams" class="item item-icon-left" ui-sref="teamselect({quest: item.questId})">
+                <i class=""></i>
+                {{ item.name }}
+            </a>
+            <a class="item item-icon-left">
+                <i class="icon ion-plus"></i>
+                Add team
+            </a>
+        </div>
+    </ion-content>
+</ion-view>

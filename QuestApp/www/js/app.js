@@ -17,6 +17,11 @@ angular.module('quest', ['ionic', 'quest.controllers'])
             url: "/teamselect/:quest",
             templateUrl: "templates/teamselect.html",
             controller: 'TeamSelectCtrl'
+        })
+        .state('questinfo', {
+            url: "/questinfo",
+            templateUrl: "templates/teamselect.html",
+            controller: 'TeamSelectCtrl'
         });
 
     $urlRouterProvider.otherwise('/questselect');
