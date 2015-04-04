@@ -25,6 +25,9 @@
         <module name="quest-backend" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="quest-backend" target="1.7" />
+    </bytecodeTargetLevel>
   </component>
 </project>
 
