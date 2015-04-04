@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('quest.controllers', [])
 
 .controller('QuestSelectCtrl', ['$scope','$rootScope', function($scope, $rootScope) {
 
