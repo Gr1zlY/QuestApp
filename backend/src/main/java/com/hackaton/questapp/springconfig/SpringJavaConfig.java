@@ -2,6 +2,7 @@ package com.hackaton.questapp.springconfig;
 
 import com.hackaton.questapp.dao.*;
 import com.hackaton.questapp.entity.*;
+import com.hackaton.questapp.httpfilter.SimpleCORSFilter;
 import com.hackaton.questapp.rest.QuestService;
 import com.hackaton.questapp.rest.QuestStatusService;
 import com.hackaton.questapp.rest.TaskService;
@@ -25,10 +26,10 @@ public class SpringJavaConfig {
     private static final QuestEntity QUEST_EXAMPLE_SECOND = new QuestEntity(2L,"pretty quest","Not the best, but better than the others",
                                                                                    null, null, System.currentTimeMillis());
 
-    private static final TaskEntity QUEST_TASK_STUB = new TaskEntity(1L,QUEST_EXAMPLE_ENTITY,"First riddle! SINEP MAET",
+    private static final TaskEntity QUEST_TASK_STUB = new TaskEntity(1L,QUEST_EXAMPLE_ENTITY,"even more first","First riddle! SINEP MAET",
                                                                     null, 1, TaskType.INPUT,"TEAM PENIS");
 
-    private static final TaskEntity QUEST_TASK_STUB2 = new TaskEntity(2L,QUEST_EXAMPLE_SECOND,"blahblah riddle! FIND ME",
+    private static final TaskEntity QUEST_TASK_STUB2 = new TaskEntity(2L,QUEST_EXAMPLE_SECOND,"first","blahblah riddle! FIND ME",
             null, 1, TaskType.GPS,"");
 
 
@@ -114,6 +115,12 @@ public class SpringJavaConfig {
     @Scope(value = "prototype")
     public DBStubStorage dbStubStorage(){
         return new DBStubStorage();
+    }
+
+    @Bean
+    public SimpleCORSFilter corsFilter(){
+        SimpleCORSFilter filter = new SimpleCORSFilter();
+        return filter;
     }
 
 

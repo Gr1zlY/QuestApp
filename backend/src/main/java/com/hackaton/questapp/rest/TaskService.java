@@ -77,10 +77,10 @@ public class TaskService {
     }
 
     @RequestMapping(value = "/getTasksByQuest", headers = "Accept=application/json", method = RequestMethod.PUT)
-    public Status insertTask(@RequestParam Long questId, @RequestParam String description, @RequestParam String photo,
+    public Status insertTask(@RequestParam Long questId,@RequestParam String name, @RequestParam String description, @RequestParam String photo,
                              @RequestParam int ordinalNumber,@RequestParam String taskType, @RequestParam String solution){
 
-       TaskEntity entity = new TaskEntity(System.currentTimeMillis(),questDao.getById(questId),description,
+       TaskEntity entity = new TaskEntity(System.currentTimeMillis(),questDao.getById(questId),name,description,
                 Base64.decode(photo.getBytes()), ordinalNumber, TaskType.getTaskTypeByString(taskType),solution);
         taskDao.insert(entity.getTaskId(),entity); // TODO: ORDINAL LOGIC
         return new Status("OK");

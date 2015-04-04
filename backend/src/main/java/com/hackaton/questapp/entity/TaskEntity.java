@@ -1,6 +1,5 @@
 package com.hackaton.questapp.entity;
 
-import javax.persistence.*;
 import java.util.Arrays;
 
 /**
@@ -18,7 +17,9 @@ public class TaskEntity {
 
     private QuestEntity quest;
 
-    private String textDescription;
+    private String taskName;
+
+    private String description;
 
     private byte[] photo;
 
@@ -28,10 +29,11 @@ public class TaskEntity {
 
     private String solution; // can have ANYTHING
 
-    public TaskEntity(Long taskId, QuestEntity quest, String textDescription, byte[] photo, int taskOrdinalNumber, TaskType taskType, String solution) {
+    public TaskEntity(Long taskId, QuestEntity quest,String taskName, String textDescription, byte[] photo, int taskOrdinalNumber, TaskType taskType, String solution) {
         this.taskId = taskId;
         this.quest = quest;
-        this.textDescription = textDescription;
+        this.taskName = taskName;
+        this.description = textDescription;
         this.photo = photo;
         this.taskOrdinalNumber = taskOrdinalNumber;
         this.taskType = taskType;
@@ -54,12 +56,12 @@ public class TaskEntity {
         this.quest = quest;
     }
 
-    public String getTextDescription() {
-        return textDescription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setTextDescription(String textDescription) {
-        this.textDescription = textDescription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public byte[] getPhoto() {
@@ -116,7 +118,7 @@ public class TaskEntity {
         return "TaskEntity{" +
                 "taskId=" + taskId +
                 ", quest=" + quest +
-                ", textDescription='" + textDescription + '\'' +
+                ", description='" + description + '\'' +
                 ", photo=" + Arrays.toString(photo) +
                 ", taskOrdinalNumber=" + taskOrdinalNumber +
                 '}';
