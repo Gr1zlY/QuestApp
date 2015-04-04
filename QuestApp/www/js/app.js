@@ -10,17 +10,13 @@ angular.module('quest', ['ionic', 'quest.controllers'])
     $stateProvider
         .state('questselect', {
             url: "/questselect",
-            views: {
-                templateUrl: "templates/questselect.html",
-                controller: 'QuestSelectCtrl'
-            }
+            templateUrl: "templates/questselect.html",
+            controller: 'QuestSelectCtrl'
         })  
         .state('teamselect', {
             url: "/teamselect/:quest",
-            views: {
-                templateUrl: "templates/teamselect.html",
-                controller: 'TeamSelectCtrl'
-            }
+            templateUrl: "templates/teamselect.html",
+            controller: 'TeamSelectCtrl'
         });
 
     $urlRouterProvider.otherwise('/questselect');
