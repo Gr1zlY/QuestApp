@@ -8,5 +8,16 @@ public enum TaskType {
     GPS,
     INPUT,
     QRCODE,
-    CUSTOM
+    CUSTOM;
+
+
+    public static TaskType getTaskTypeByString(String string){
+        switch(string){
+            case "GPS": return GPS;
+            case "INPUT": return INPUT;
+            case "QRCODE": return QRCODE;
+            case "CUSTOM": return CUSTOM;
+            default: return null;
+        }
+    }
 }

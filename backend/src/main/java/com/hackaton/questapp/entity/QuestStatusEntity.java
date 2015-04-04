@@ -14,6 +14,11 @@ public class QuestStatusEntity {
 
     private Long tasksCompleted;
 
+    public QuestStatusEntity(TeamEntity team, Long tasksCompleted) {
+        this.team = team;
+        this.tasksCompleted = tasksCompleted;
+    }
+
     public TeamEntity getTeam() {
         return team;
     }

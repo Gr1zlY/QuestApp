@@ -23,8 +23,11 @@ public abstract class AbstractDao<Type> {
         storage.insert(key,data);
     }
 
-
     public void setStorage(DBStubStorage<Type> storage) {
         this.storage = storage;
+    }
+
+    public void removeById(Long id){
+        storage.removeById(id);
     }
 }

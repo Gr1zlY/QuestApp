@@ -24,4 +24,8 @@ public class DBStubStorage<Type> {
     public void insert(Long key,Type data){
         storage.put(key,data);
     }
+
+    public void removeById(Long key){
+        storage.remove(key);
+    }
 }

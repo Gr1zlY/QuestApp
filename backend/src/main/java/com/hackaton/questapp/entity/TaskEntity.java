@@ -28,6 +28,16 @@ public class TaskEntity {
 
     private String solution; // can have ANYTHING
 
+    public TaskEntity(Long taskId, QuestEntity quest, String textDescription, byte[] photo, int taskOrdinalNumber, TaskType taskType, String solution) {
+        this.taskId = taskId;
+        this.quest = quest;
+        this.textDescription = textDescription;
+        this.photo = photo;
+        this.taskOrdinalNumber = taskOrdinalNumber;
+        this.taskType = taskType;
+        this.solution = solution;
+    }
+
     public Long getTaskId() {
         return taskId;
     }
