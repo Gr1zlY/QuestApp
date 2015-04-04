@@ -5,7 +5,7 @@ import java.util.Arrays;
 /**
  * Created by Sheremeta on 04.04.2015.
  */
-public abstract class TaskEntity {
+public class TaskEntity {
 
     private Long id;
 
@@ -16,6 +16,10 @@ public abstract class TaskEntity {
     private byte[] photo;
 
     private int taskOrdinalNumber;
+
+    private TaskType taskType;
+
+    private String solution; // can have ANYTHING
 
     public Long getId() {
         return id;
@@ -55,6 +59,22 @@ public abstract class TaskEntity {
 
     public void setTaskOrdinalNumber(int taskOrdinalNumber) {
         this.taskOrdinalNumber = taskOrdinalNumber;
+    }
+
+    public String getSolution() {
+        return solution;
+    }
+
+    public void setSolution(String solution) {
+        this.solution = solution;
+    }
+
+    public TaskType getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(TaskType taskType) {
+        this.taskType = taskType;
     }
 
     @Override
