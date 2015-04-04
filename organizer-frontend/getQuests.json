@@ -1,0 +1,16 @@
+[{
+	"questId":1,
+	"name":"ugly quest",
+	"description":"The most ugliest quest you will ever see",
+	"photo":null,
+	"creator":null,
+	"time":1428177669417
+},
+{
+	"questId":2,
+	"name":"pretty quest",
+	"description":"Not the best, but better than the others",
+	"photo":null,
+	"creator":null,
+	"time":1428177669417
+}]
