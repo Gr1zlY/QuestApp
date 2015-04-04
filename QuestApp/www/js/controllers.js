@@ -54,7 +54,11 @@ angular.module('quest.controllers', [])
     $scope.refreshdata();
 }])
 
-.controller('TaskInfoCtrl', ['$scope', function($scope) {
+.controller('TaskInfoCtrl', ['$scope', '$stateParams',function($scope, $stateParams) {
+
+    console.log($stateParams.taskId);
+
+    $scope.task = {taskId: 2, name: 'Task 1', description: 'asdfasdfasdf', photo: null};
 
     $scope.refreshdata = function(){
     
