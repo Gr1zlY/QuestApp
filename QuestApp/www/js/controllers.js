@@ -1,39 +1,103 @@
 angular.module('quest.controllers', [])
 
-.controller('QuestSelectCtrl', ['$scope','$rootScope', function($scope, $rootScope) {
+.controller('QuestSelectCtrl', ['$scope','$rootScope', '$http', function($scope, $rootScope, $http) {
 
-    $scope.quests = [
-        {questId: 1, name: "ugly", description: "ugly", photo: null},
-        {questId: 2, name: "ugly 2", description: "ugly 2", photo: null}
-    ];
+    $scope.quests = [];
+        //{questId: 1, name: "ugly", description: "ugly", photo: null},
+        //{questId: 2, name: "ugly 2", description: "ugly 2", photo: null}
     
     $scope.refreshdata = function(){
-        $scope.quests.push( {questId: 2, name: "ugly 2", description: "ugly 2", photo: null});
+
+        $http.get("http://192.168.20.38:8087/getQuests").then(
+            function(responce){
+                //console.log(responce);
+                $scope.quests = responce.data;
+            },
+            function(error){
+                console.log(error);
+                //TODO: arr retry
+            }
+        );
     }
 
     $scope.refreshdata();
 }])
 
-.controller('TeamSelectCtrl', ['$scope','$state', '$stateParams', function($scope, $state, $stateParams) {
+.controller('TeamSelectCtrl', ['$scope','$state', '$stateParams', '$http','$ionicPopup',function($scope, $state, $stateParams, $http, $ionicPopup) {
 
-    //var questId = $routeParams.questId;
+    var questId = $stateParams.questId;
 
-    $scope.teams = [
-        {teamId: 1, name: "ugly"},
-        {teamId: 2, name: "ugly 2"}
-    ];
+    $scope.teams = [];
+        //{teamId: 1, name: "ugly"},
+        //{teamId: 2, name: "ugly 2"}
+
 
     $scope.refreshdata = function(){
         //pull data from server
+        $http.get("http://192.168.20.38:8087/getTeams", {params: {"questId":questId}}).then(
+            function(responce){
+                console.log(responce);
+                $scope.teams = responce.data;
+            },
+            function(error){
+                console.log(error);
+            }
+        );
     }
 
     $scope.refreshdata();
+
+    //TODO: creanup
+    var deviceId = '';
+    if(typeof device !== 'undefined'){
+        deviceId = device.uuid;
+    } else {
+        deviceId = 'browser';
+    }
 
     $scope.teamselected = function(teamId){
         //send get to save
         //send with device id
         console.log(teamId);
         $state.go("questinfo", {});
+    }
+
+    $scope.team = {};
+
+    $scope.createteam = function(){
+        var teamPopup = $ionicPopup.show({
+            template: '<input type="text" ng-model="team.name" />',
+            title: 'Enter team name',
+            scope: $scope,
+            buttons: [
+                {text: 'Cancel'},
+                {text: '<b>Create</b>',
+                    type: 'button-positive',
+                    onTap: function(e){
+                        if(!$scope.team.name){
+                            e.preventDefault();
+                            //TODO: cleanup
+                        } else {
+                            return $scope.team.name;
+                        }
+                    }
+                }
+            ]
+        });
+        teamPopup.then(function(result){
+            if(result !== null){
+                $http.get("http://192.168.20.38:8087/createTeam", {params: {"questId":questId, "deviceId" : deviceId, "name": $scope.team.name}}).then(
+                    function(responce){
+                        console.log(responce);
+                        //$scope.teams = responce.data;
+                    },
+                    function(error){
+                        console.log(error);
+                    }
+                );
+            }
+        });
+    
     }
 
 }])
@@ -87,7 +151,7 @@ angular.module('quest.controllers', [])
                     submit({type: "geo", data: result});
                 },
                 function(error){
-                    alert('check your location settings');
+                    alert(error.code+ error.message + ' check your location settings');
                 });
     }
     
