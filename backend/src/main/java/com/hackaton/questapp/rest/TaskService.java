@@ -8,7 +8,6 @@ import com.hackaton.questapp.dao.TeamMemberDao;
 import com.hackaton.questapp.entity.*;
 import org.apache.xmlbeans.impl.util.Base64;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -76,7 +75,7 @@ public class TaskService {
         return taskDao.getTasksByQuestId(questId);
     }
 
-    @RequestMapping(value = "/getTasksByQuest", headers = "Accept=application/json", method = RequestMethod.PUT)
+    @RequestMapping(value = "/insertTask", headers = "Accept=application/json", method = RequestMethod.PUT)
     public Status insertTask(@RequestParam Long questId,@RequestParam String name, @RequestParam String description, @RequestParam String photo,
                              @RequestParam int ordinalNumber,@RequestParam String taskType, @RequestParam String solution){
 
@@ -89,6 +88,20 @@ public class TaskService {
     @RequestMapping(value = "/removeTaskByTaskId", headers = "Accept=application/json", method = RequestMethod.DELETE)
     public Status removeTaskByTaskId(@RequestParam Long taskId){
         taskDao.removeByTaskId(taskId);
+        return new Status("OK");
+    }
+
+    @RequestMapping(value = "/updateTask", headers = "Accept=application/json", method = RequestMethod.DELETE)
+    public Status updateTaskByTaskId(@RequestParam Long taskId,@RequestParam String name, @RequestParam String description, @RequestParam String photo,
+                                     @RequestParam int ordinalNumber,@RequestParam String taskType, @RequestParam String solution){
+         TaskEntity taskEntity = taskDao.getById(taskId);
+        if(taskEntity == null) return new Status("NOT FOUND");
+        taskEntity.setTaskName(name);
+        taskEntity.setDescription(description);
+        taskEntity.setPhoto(Base64.decode(photo.getBytes()));
+        taskEntity.setTaskOrdinalNumber(ordinalNumber);
+        taskEntity.setTaskType(TaskType.getTaskTypeByString(taskType));
+        taskEntity.setSolution(solution);
         return new Status("OK");
     }
 
