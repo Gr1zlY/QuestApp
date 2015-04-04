@@ -1,10 +1,18 @@
 package com.hackaton.questapp.entity;
 
+import javax.persistence.*;
+
 /**
  * Created by Sheremeta on 04.04.2015.
  */
+
+//@Entity
+//@Table(name = "Organizator")
 public class OrganizatorUser {
 
+/*    @Id
+    @Column(name = "userId")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)*/
     private Long userId;
 
     private String login;

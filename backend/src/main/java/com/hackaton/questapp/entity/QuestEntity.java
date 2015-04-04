@@ -1,13 +1,20 @@
 package com.hackaton.questapp.entity;
 
+import javax.persistence.*;
 import java.util.Arrays;
 
 /**
  * Created by Sheremeta on 04.04.2015.
  */
+/*@Entity
+@Table(name = "Quest")*/
 public class QuestEntity {
 
-    private Long id;
+
+/*    @Id
+    @Column(name = "userId")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)*/
+    private Long userId;
 
     private String name;
 
@@ -19,8 +26,8 @@ public class QuestEntity {
 
     private Long time;
 
-    public QuestEntity(Long id, String name, String description, byte[] photo, OrganizatorUser creator, Long time) {
-        this.id = id;
+    public QuestEntity(Long userId, String name, String description, byte[] photo, OrganizatorUser creator, Long time) {
+        this.userId = userId;
         this.name = name;
         this.description = description;
         this.photo = photo;
@@ -28,12 +35,12 @@ public class QuestEntity {
         this.time = time;
     }
 
-    public Long getId() {
-        return id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getName() {
@@ -83,21 +90,21 @@ public class QuestEntity {
 
         QuestEntity that = (QuestEntity) o;
 
-        if (!id.equals(that.id)) return false;
+        if (!userId.equals(that.userId)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return userId.hashCode();
     }
 
 
     @Override
     public String toString() {
         return "QuestEntity{" +
-                "id=" + id +
+                "userId=" + userId +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", photo=" + Arrays.toString(photo) +

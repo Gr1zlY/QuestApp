@@ -1,13 +1,20 @@
 package com.hackaton.questapp.entity;
 
+import javax.persistence.*;
 import java.util.Arrays;
 
 /**
  * Created by Sheremeta on 04.04.2015.
  */
+
+//@Entity
+//@Table(name = "Task")
 public class TaskEntity {
 
-    private Long id;
+  //  @Id
+ //   @Column(name = "taskId")
+ //   @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long taskId;
 
     private QuestEntity quest;
 
@@ -21,12 +28,12 @@ public class TaskEntity {
 
     private String solution; // can have ANYTHING
 
-    public Long getId() {
-        return id;
+    public Long getTaskId() {
+        return taskId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setTaskId(Long taskId) {
+        this.taskId = taskId;
     }
 
     public QuestEntity getQuest() {
@@ -84,20 +91,20 @@ public class TaskEntity {
 
         TaskEntity that = (TaskEntity) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (taskId != null ? !taskId.equals(that.taskId) : that.taskId != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        return taskId != null ? taskId.hashCode() : 0;
     }
 
     @Override
     public String toString() {
         return "TaskEntity{" +
-                "id=" + id +
+                "taskId=" + taskId +
                 ", quest=" + quest +
                 ", textDescription='" + textDescription + '\'' +
                 ", photo=" + Arrays.toString(photo) +
