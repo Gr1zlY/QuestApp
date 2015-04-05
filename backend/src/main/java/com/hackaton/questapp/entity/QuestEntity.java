@@ -5,9 +5,15 @@ import java.util.Arrays;
 /**
  * Created by Sheremeta on 04.04.2015.
  */
+/*@Entity
+@Table(name = "Quest")*/
 public class QuestEntity {
 
-    private Long id;
+
+/*    @Id
+    @Column(name = "questId")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)*/
+    private Long questId;
 
     private String name;
 
@@ -19,12 +25,21 @@ public class QuestEntity {
 
     private Long time;
 
-    public Long getId() {
-        return id;
+    public QuestEntity(Long userId, String name, String description, byte[] photo, OrganizatorUser creator, Long time) {
+        this.questId = userId;
+        this.name = name;
+        this.description = description;
+        this.photo = photo;
+        this.creator = creator;
+        this.time = time;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Long getQuestId() {
+        return questId;
+    }
+
+    public void setQuestId(Long questId) {
+        this.questId = questId;
     }
 
     public String getName() {
@@ -74,21 +89,21 @@ public class QuestEntity {
 
         QuestEntity that = (QuestEntity) o;
 
-        if (!id.equals(that.id)) return false;
+        if (!questId.equals(that.questId)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return questId.hashCode();
     }
 
 
     @Override
     public String toString() {
         return "QuestEntity{" +
-                "id=" + id +
+                "questId=" + questId +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", photo=" + Arrays.toString(photo) +
