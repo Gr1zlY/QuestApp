@@ -6,21 +6,21 @@ var questControllers = angular.module('questControllers', []);
 questControllers.controller('LoginCtrl', ['$scope', '$http', '$location', 'userService',
 	function($scope, $http, $location, userService) {
 		$scope.do_login = function() {
-			$http.post('http://filetransfereasyaspie.com:8087/login?login='+$scope.login+'&password='+$scope.pass).
-			success(function(data) {
-				if (data == "-1")
-					return;
-				var user = {
-					userId: data,
-					login: $scope.login
-				};
-				userService.setUser(user);
-				$location.path('/quests');
-			}).
-			error(function(data) {
-				console.log(data);
-				alert('Unknown error. Please fuck off..');
-			});
+			$http.post('http://filetransfereasyaspie.com:8087/login?login='+$scope.login+'&password='+$scope.pass).then(
+				function(data) {
+					if (data == "-1")
+						return;
+					var user = {
+						userId: data,
+						login: $scope.login
+					};
+					userService.setUser(user);
+					$location.path('/quests');
+				},
+				function(data) {
+					console.log(data);
+					alert('Unknown error. Please fuck off..');
+				});
 		}
 		$scope.go = function ( path ) {
 			$location.path( path );
@@ -115,45 +115,45 @@ questControllers.controller('EditQuestCtrl', ['$scope', '$http', '$location', '$
 							var i;
 							for (i=0;i<$scope.tasks.length;i++) {
 								var task = $scope.tasks[i];
-							/*$.each($scope.tasks, function(task){*/
-								if ($scope.oldTasks.indexOf(task) == -1) {
-									console.log(task);
-									$http.post('http://filetransfereasyaspie.com:8087/insertTask?questId='+$scope.quest.questId+
-										'&name='+task.taskName+
-										'&description='+task.description+
-										'&photo=null'+
-										'&ordinalNumber='+$scope.tasks.indexOf(task)+
-										'&taskType='+task.taskType+
-										'&solution=null').then(function(response) {
-											console.log(response.data);
-										}, function(response) {
-											console.log(response);
-											alert('error, status: '+response.status);
-										});
-									} else {
-										$http.post('http://filetransfereasyaspie.com:8087/removeTaskByTaskId?taskId='+task.taskId).then(function(data) {
-											$http.post('http://filetransfereasyaspie.com:8087/insertTask?questId='+$scope.quest.questId+
-												'&name='+task.taskName+
-												'&description='+task.description+
-												'&photo=null'+
-												'&ordinalNumber='+$scope.tasks.indexOf(task)+
-												'&taskType='+task.taskType+
-												'&solution=null').then(
-												function(response) {
-													console.log(response.data);
-												}, function(response) {
-													console.log(response);
-													alert('error, status: '+response.status);
-												});
+								/*$.each($scope.tasks, function(task){*/
+									if ($scope.oldTasks.indexOf(task) == -1) {
+										console.log(task);
+										$http.post('http://filetransfereasyaspie.com:8087/insertTask?questId='+$scope.quest.questId+
+											'&name='+task.taskName+
+											'&description='+task.description+
+											'&photo=null'+
+											'&ordinalNumber='+$scope.tasks.indexOf(task)+
+											'&taskType='+task.taskType+
+											'&solution='+task.solution).then(function(response) {
+												console.log(response.data);
+											}, function(response) {
+												console.log(response);
+												alert('error, status: '+response.status);
 											});
-									}
-								};
-$location.path('/quests');
-},
-function(data) {
-	console.log(data);
-	alert('Error during adding new quest. Please wait, and try it again.')
-});
+										} else {
+											$http.post('http://filetransfereasyaspie.com:8087/removeTaskByTaskId?taskId='+task.taskId).then(function(data) {
+												$http.post('http://filetransfereasyaspie.com:8087/insertTask?questId='+$scope.quest.questId+
+													'&name='+task.taskName+
+													'&description='+task.description+
+													'&photo=null'+
+													'&ordinalNumber='+$scope.tasks.indexOf(task)+
+													'&taskType='+task.taskType+
+													'&solution='+task.solution).then(
+													function(response) {
+														console.log(response.data);
+													}, function(response) {
+														console.log(response);
+														alert('error, status: '+response.status);
+													});
+												});
+										}
+									};
+									$location.path('/quests');
+								},
+								function(data) {
+									console.log(data);
+									alert('Error during adding new quest. Please wait, and try it again.')
+								});
 }
 };
 $scope.go = function ( path ) {
