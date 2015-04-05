@@ -65,13 +65,7 @@ public class TaskService {
                                   @RequestParam String deviceId) throws JSONException {
         TaskEntity taskEntity = taskDao.getById(taskId);
         TeamMemberEntity teamMember = teamMemberDao.getTeamMemberById(deviceId);
-        TeamEntity team = teamMember.getTeam();
-        /*
-            temporaty stub for michael while i am driving
-         */
-        Random random = new Random(System.currentTimeMillis());
-        boolean GPSPass = taskEntity.getTaskType() == TaskType.GPS && random.nextBoolean();
-        if( StringUtils.equalsIgnoreCase(taskEntity.getSolution(),solutionCandidate) || GPSPass){ // trim here
+        if( StringUtils.equalsIgnoreCase(taskEntity.getSolution(),solutionCandidate)){ // trim here
             QuestStatusEntity questStatusEntity = questStatusDao.getByTeam(team);
             if(questStatusEntity.getTasksCompleted() != taskEntity.getTaskOrdinalNumber() - 1) return new Status("WRONG TASK ATTEMPTED");
             questStatusEntity.setTasksCompleted(questStatusEntity.getTasksCompleted() + 1);
