@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Scope;
 @Configuration
 public class SpringJavaConfig {
 
-    private static final QuestEntity QUEST_EXAMPLE_ENTITY = new QuestEntity(1L,"ugly quest","The most ugliest quest you will ever see",
+    private static final QuestEntity QUEST_EXAMPLE_ENTITY = new QuestEntity(1L,"Hackaton quest!","First quest, that can be completed while presentating this app!",
                                                                                    null,null,System.currentTimeMillis());
 
     private static final QuestEntity QUEST_EXAMPLE_SECOND = new QuestEntity(2L,"pretty quest","Not the best, but better than the others",

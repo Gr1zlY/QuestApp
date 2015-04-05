@@ -6,6 +6,7 @@ import com.hackaton.questapp.dao.QuestStatusDao;
 import com.hackaton.questapp.dao.TaskDao;
 import com.hackaton.questapp.dao.TeamMemberDao;
 import com.hackaton.questapp.entity.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.xmlbeans.impl.util.Base64;
 import org.json.JSONException;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Sheremeta on 04.04.2015.
@@ -49,7 +51,9 @@ public class TaskService {
         TeamEntity team = teamMember.getTeam();
         QuestStatusEntity status = questStatusDao.getByTeam(team);
         for(int i = 1;i<=status.getTasksCompleted()+1;i++){
-            TaskEntityForClientDTO dto = new TaskEntityForClientDTO(taskDao.getTaskByNumberAndQuestId(i,team.getQuest().getQuestId()));
+            TaskEntity entity = taskDao.getTaskByNumberAndQuestId(i,team.getQuest().getQuestId());
+            if(entity == null) continue; // what a hack
+            TaskEntityForClientDTO dto = new TaskEntityForClientDTO(entity);
             dto.setSolved(i <= status.getTasksCompleted());
             result.add(dto);
         }
@@ -62,11 +66,16 @@ public class TaskService {
         TaskEntity taskEntity = taskDao.getById(taskId);
         TeamMemberEntity teamMember = teamMemberDao.getTeamMemberById(deviceId);
         TeamEntity team = teamMember.getTeam();
-        if(taskEntity.getSolution().equals(solutionCandidate)){ // trim
+        /*
+            temporaty stub for michael while i am driving
+         */
+        Random random = new Random(System.currentTimeMillis());
+        boolean GPSPass = taskEntity.getTaskType() == TaskType.GPS && random.nextBoolean();
+        if( StringUtils.equalsIgnoreCase(taskEntity.getSolution(),solutionCandidate) || GPSPass){ // trim here
             QuestStatusEntity questStatusEntity = questStatusDao.getByTeam(team);
             if(questStatusEntity.getTasksCompleted() != taskEntity.getTaskOrdinalNumber() - 1) return new Status("WRONG TASK ATTEMPTED");
             questStatusEntity.setTasksCompleted(questStatusEntity.getTasksCompleted() + 1);
-            return getLatestAvialableTask(deviceId);
+            return new TaskStatusEntity("Completed",getLatestAvialableTask(deviceId).getTaskId());
         } else {
             return new Status("WRONG");
         }
@@ -105,6 +114,17 @@ public class TaskService {
         taskEntity.setTaskType(TaskType.getTaskTypeByString(taskType));
         taskEntity.setSolution(solution);
         return new Status("OK");
+    }
+
+    @RequestMapping(value = "/getTaskById", headers = "Accept=application/json", method = RequestMethod.GET)
+    public TaskEntityForClientDTO getTaskById(@RequestParam String deviceId, @RequestParam Long taskId){
+        TaskEntityForClientDTO taskEntity = new TaskEntityForClientDTO(taskDao.getById(taskId));
+        TeamMemberEntity teamMember = teamMemberDao.getTeamMemberById(deviceId);
+        TeamEntity team = teamMember.getTeam();
+        if( team == null ) return null;
+        QuestStatusEntity status = questStatusDao.getByTeam(team);
+        taskEntity.setSolved(status.getTasksCompleted() >= taskEntity.getTaskOrdinalNumber());
+        return taskEntity;
     }
 
     public void setTeamMemberDao(TeamMemberDao teamMemberDao) {

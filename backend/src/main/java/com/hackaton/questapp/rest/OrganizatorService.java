@@ -1,6 +1,5 @@
 package com.hackaton.questapp.rest;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.hackaton.questapp.dao.OrganizatorDao;
 import com.hackaton.questapp.entity.OrganizatorUser;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,10 +22,10 @@ public class OrganizatorService {
        return validLogin? user.getUserId() : -1L;
     }
 
-    @RequestMapping(value = "/register", headers = "Accept=application/json", method = RequestMethod.PUT)
+    @RequestMapping(value = "/register", headers = "Accept=application/json", method = RequestMethod.POST)
     public Long register(@RequestParam String login, @RequestParam String password){
         OrganizatorUser user = organizatorDao.getByLogin(login);
-        if(user.getLogin().equals(login)){
+        if(user != null && user.getLogin().equals(login)){
             return -1L;
         } else {
             OrganizatorUser newUser = new OrganizatorUser(System.currentTimeMillis(),login,password);
