@@ -1,17 +1,31 @@
 angular.module('quest.controllers', [])
 
-.controller('QuestSelectCtrl', ['$scope','$rootScope', '$http', '$ionicPopup', function($scope, $rootScope, $http, $ionicPopup) {
+.controller('QuestSelectCtrl', ['$scope','$rootScope', '$http', '$ionicPopup', '$ionicLoading',function($scope, $rootScope, $http, $ionicPopup, $ionicLoading) {
+
+    $scope.loading = function(){
+        $ionicLoading.show({
+            template: '<ion-spinner></ion-spinner>'
+        });
+    }
+
+    $scope.endloading = function(){
+        $ionicLoading.hide();
+    }
 
     $scope.quests = [];
     
     $scope.refreshdata = function(){
 
+        $scope.loading();
+
         $http.get("http://filetransfereasyaspie.com:8087/getQuests").then(
             function(responce){
                 $scope.quests = responce.data;
+                $scope.endloading();
             },
             function(error){
                 console.log(error);
+                $scope.endloading();
 
                 var confirmPopup = $ionicPopup.confirm({
                     title: 'Network Error',
@@ -30,7 +44,17 @@ angular.module('quest.controllers', [])
     $scope.refreshdata();
 }])
 
-.controller('TeamSelectCtrl', ['$scope','$state', '$stateParams', '$http','$ionicPopup',function($scope, $state, $stateParams, $http, $ionicPopup) {
+.controller('TeamSelectCtrl', ['$scope','$state', '$stateParams', '$http','$ionicPopup', '$ionicLoading', function($scope, $state, $stateParams, $http, $ionicPopup, $ionicLoading) {
+
+    $scope.loading = function(){
+        $ionicLoading.show({
+            template: '<ion-spinner></ion-spinner>'
+        });
+    }
+
+    $scope.endloading = function(){
+        $ionicLoading.hide();
+    }
 
     var questId = $stateParams.questId;
 
@@ -38,13 +62,18 @@ angular.module('quest.controllers', [])
 
     $scope.refreshdata = function(){
 
+        $scope.loading();
+
         $http.get("http://filetransfereasyaspie.com:8087/getTeams", {params: {"questId":questId}}).then(
             function(responce){
                 console.log(responce);
                 $scope.teams = responce.data;
+
+                $scope.endloading();
             },
             function(error){
                 console.log(error);
+                $scope.endloading();
 
                 var confirmPopup = $ionicPopup.confirm({
                     title: 'Network Error',
@@ -72,11 +101,15 @@ angular.module('quest.controllers', [])
 
     $scope.teamselected = function(teamId){
 
+        $scope.loading();
+
         $http.get("http://filetransfereasyaspie.com:8087/joinTeam", {params: {"teamId":teamId, "deviceId": deviceId}}).then(
             function(responce){
+                $scope.endloading();
                 $state.go("questinfo", {});
             },
             function(error){
+                $scope.endloading();
                 console.log(error);
             }
         );
@@ -96,6 +129,7 @@ angular.module('quest.controllers', [])
                         if(!$scope.team.name){
                             e.preventDefault();
                         } else {
+                            $scope.loading();
                             $http({
                                 url: "http://filetransfereasyaspie.com:8087/createTeam",
                                 type: "GET",
@@ -103,12 +137,15 @@ angular.module('quest.controllers', [])
                             }).then(
                                 function(responce){
                                     console.log(responce);
+                                    $scope.endloading();
+
                                     if(responce.data.status.localeCompare("OK") == 0){
                                         $state.go("questinfo", {});
                                     }
                                 },
                                 function(error){
                                     console.log(error);
+                                    $scope.endloading();
                                     e.preventDefault();
                                 }
                             );
@@ -120,7 +157,17 @@ angular.module('quest.controllers', [])
     }
 }])
 
-.controller('QuestInfoCtrl', ['$scope','$rootScope', '$http', '$ionicPopup', function($scope, $rootScope, $http, $ionicPopup) {
+.controller('QuestInfoCtrl', ['$scope','$rootScope', '$http', '$ionicPopup', '$ionicLoading',function($scope, $rootScope, $http, $ionicPopup, $ionicLoading) {
+
+    $scope.loading = function(){
+        $ionicLoading.show({
+            template: '<ion-spinner></ion-spinner>'
+        });
+    }
+
+    $scope.endloading = function(){
+        $ionicLoading.hide();
+    }
 
     //TODO: creanup
     var deviceId = '';
@@ -135,12 +182,26 @@ angular.module('quest.controllers', [])
     $scope.tasks = [];
 
     $scope.refreshdata = function(){
+        $scope.loading();
         $http.get("http://filetransfereasyaspie.com:8087/getQuestByDeviceId", {params: {"deviceId":deviceId}}).then(
             function(response){
                 $scope.quest = response.data;
+                $scope.endloading();
             },
             function(error){
                 console.log(error);
+                $scope.endloading();
+
+                var confirmPopup = $ionicPopup.confirm({
+                    title: 'Network Error',
+                    template: 'Try again?'
+                });
+
+                confirmPopup.then(function(res){
+                    if(res){
+                        $scope.refreshdata();
+                    }
+                });
             }
         );
 
@@ -150,6 +211,16 @@ angular.module('quest.controllers', [])
             },
             function(error){
                 console.log(error);
+                var confirmPopup = $ionicPopup.confirm({
+                    title: 'Network Error',
+                    template: 'Try again?'
+                });
+
+                confirmPopup.then(function(res){
+                    if(res){
+                        $scope.refreshdata();
+                    }
+                });
             }
         );
     }
@@ -256,6 +327,7 @@ angular.module('quest.controllers', [])
             },
             function(error){
                 alert(error.code+ error.message + ' check your location settings');
+                cordova.require('cordova/plugin/diagnostic').switchToLocationSettings();
             }
         );
     }
