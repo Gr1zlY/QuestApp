@@ -49,7 +49,9 @@ public class TaskService {
         TeamEntity team = teamMember.getTeam();
         QuestStatusEntity status = questStatusDao.getByTeam(team);
         for(int i = 1;i<=status.getTasksCompleted()+1;i++){
-            TaskEntityForClientDTO dto = new TaskEntityForClientDTO(taskDao.getTaskByNumberAndQuestId(i,team.getQuest().getQuestId()));
+            TaskEntity entity = taskDao.getTaskByNumberAndQuestId(i,team.getQuest().getQuestId());
+            if(entity == null) continue; // what a hack
+            TaskEntityForClientDTO dto = new TaskEntityForClientDTO(entity);
             dto.setSolved(i <= status.getTasksCompleted());
             result.add(dto);
         }
