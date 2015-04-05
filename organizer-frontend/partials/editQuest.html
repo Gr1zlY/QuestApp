@@ -2,6 +2,11 @@
 	<section class="quest-panel">
 		<div class="panel-heading">
 			<h3>
+				<small>
+					<a href="javascript:;" ng-click="go('/quests');">
+						&lt;- Back to List
+					</a>
+				</small><br />
 				<span ng-show="quest.questId > 0">Edit </span>
 				<span ng-hide="quest.questId > 0">Add </span>
 				quest
@@ -24,7 +29,7 @@
 				<div class="form-group" flow-init>
 					<label for="photo" class="col-sm-2 control-label">Photo</label>
 					<div class="col-sm-10">
-						<div class="ng-scope" flow-init="{singleFile:true}" flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]" flow-drop>
+						<div class="ng-scope" flow-init="{singleFile:true}" flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]" flow-drop flow-drag-enter="style={border:'4px solid green'}">
 							<div class="thumbnail" ng-show="!$flow.files.length">
 								<img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
 							</div>
@@ -41,19 +46,96 @@
 						</div>
 					</div>
 				</div>
-			</div>
 
-			<h4>Checkpoints:</h4>
-
-			
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10 pull-right">
-					<button type="submit" ng-show="quest.questId > 0" class="btn btn-default">Edit</button>
-					<button type="submit" ng-hide="quest.questId > 0" class="btn btn-default">Create</button>
+				<h4>Checkpoints:</h4>
+				<div class="panel-group" id="checkpoints" role="tablist" aria-multiselectable="true">
+					<div class="panel panel-default" ng-repeat="task in tasks">
+						<div class="panel-heading" role="tab" id="heading{{task.taskId}}">
+							<h4 class="panel-title">
+								<div class="pull-left">
+									<a data-toggle="collapse" data-parent="#checkpoints" data-target="#collapse{{task.taskId}}" href="javascript:;" aria-expanded="true" aria-controls="collapse{{task.taskId}}">
+										{{tasks.indexOf(task) + 1}}. {{task.taskName}}
+									</a>
+								</div>
+								<div class="pull-right hidden-phone">
+									<button class="btn btn-danger btn-sm" ng-click="removeTask(task.taskId)"><i class="fa fa-trash-o"></i></button>
+								</div>
+								<div class="clearfix"></div>
+							</h4>
+						</div>
+						<div id="collapse{{task.taskId}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading{{task.taskId}}">
+							<div class="panel-body">
+								<div class="form-group">
+									<label for="task{{task.taskId}}-title" class="col-sm-2 control-label">Title</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="task{{task.taskId}}-title" placeholder="title" ng-model="task.taskName">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="task{{task.taskId}}-description" class="col-sm-2 control-label">Description</label>
+									<div class="col-sm-10">
+										<textarea class="form-control" id="task{{task.taskId}}-description" placeholder="Description" rows="5" ng-model="task.description"></textarea>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="task{{task.taskId}}-taskType" class="col-sm-2 control-label">Task type</label>
+									<div class="col-sm-10">
+										<select type="text" class="form-control" id="task{{task.taskId}}-taskType" placeholder="title" ng-model="task.taskType">
+											<option>GPS</option>
+											<option>Input</option>
+											<option>QR code</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group" flow-init>
+									<label for="photo" class="col-sm-2 control-label">Photo</label>
+									<div class="col-sm-10">
+										<div class="ng-scope" flow-init="{singleFile:true}" flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]" flow-drop>
+											<div class="thumbnail" ng-show="!$flow.files.length">
+												<img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
+											</div>
+											<div class="thumbnail ng-hide" ng-show="$flow.files.length">
+												<img flow-img="$flow.files[0]">
+											</div>
+											<div>
+												<span class="btn btn-primary" ng-show="!$flow.files.length" flow-btn="">Select image<input style="visibility: hidden; position: absolute;" type="file"></span> <strong>Or Drag And Drop your picture here</strong>
+												<span class="btn btn-info ng-hide" ng-show="$flow.files.length" flow-btn="">Change<input style="visibility: hidden; position: absolute;" type="file"></span>
+												<span class="btn btn-danger ng-hide" ng-show="$flow.files.length" ng-click="$flow.cancel()">
+													Remove
+												</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="markerPosition" class="col-sm-2 control-label">Choose a location</label>
+									<div class="col-sm-10">
+										<div class="hero-unit">
+											<div class="container">
+												<div id="YMapsID"></div>
+											</div>
+										</div>
+										<input type="text" class="form-control" id="markerPosition" placeholder="title" ng-model="task.solution">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-			</div>
+				<div>
+					<div class="pull-left">
+						<button type="button" ng-click="addTask()" class="btn btn-default">
+							Add new checkpoint
+						</button>
+					</div>
 
-		</form>
-	</div>
-</section>
+					<div class="pull-right">
+						<button type="submit" ng-show="quest.questId > 0" class="btn btn-primary">Save</button>
+						<button type="submit" ng-hide="quest.questId > 0" class="btn btn-primary">Create</button>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			</form>
+		</div>
+	</section>
 </div>
