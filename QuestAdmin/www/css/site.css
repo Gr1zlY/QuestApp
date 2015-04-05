@@ -1,0 +1,104 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic);
+
+body {
+	background: #eee !important;
+	color: #797979;
+	/*background: #f1f2f7;*/
+	font-family: 'Open Sans', sans-serif;
+	padding: 0px !important;
+	margin: 0px !important;
+	font-size:13px;
+	text-rendering:optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-font-smoothing: antialiased;
+}
+
+ul li {
+	list-style: none;
+}
+
+a, a:hover, a:focus {
+	text-decoration: none;
+	outline: none;
+}
+
+::selection {
+	background: #FF6C60;
+	color: #fff;
+}
+
+::-moz-selection {
+	background: #FF6C60;
+	color: #fff;
+}
+
+/*main content*/
+.white-bg {
+	background: #fff;
+	border-bottom: 1px solid #f1f2f7;
+}
+
+.wrapper {
+	display: inline-block;
+	padding: 15px;
+	width: 100%;
+	margin-top: 80px;
+	margin-bottom: 80px;
+}
+
+.clearfix {
+	clear: both;
+}
+
+/*badge*/
+.badge {
+	font-size: 8px;
+}
+.badge.bg-primary {
+	background: #8075c4;
+}
+
+.badge.bg-success {
+	background: #a9d86e;
+}
+
+.badge.bg-warning {
+	background: #FCB322;
+}
+
+.badge.bg-important {
+	background: #ff6c60;
+}
+
+.badge.bg-info {
+	background: #41cac0;
+}
+
+.badge.bg-inverse {
+	background: #2A3542;
+}
+
+.panel-heading {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+small {
+	font-size: 12px !important;
+}
+
+#YMapsID {
+	width: 500px;
+	height: 400px;
+}
+
+.hero-unit p {
+	line-height: 20px;
+}
+
+.cross-control {
+	background: url(center.gif) no-repeat;
+	position: absolute;
+	width: 16px;
+	height: 16px;
+}
