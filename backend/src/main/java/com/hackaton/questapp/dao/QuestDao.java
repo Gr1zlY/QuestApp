@@ -13,7 +13,7 @@ public class QuestDao extends AbstractDao<QuestEntity> {
     public List<QuestEntity> getQuestsByUserId(Long userId){
         List<QuestEntity> result = Lists.newArrayList();
         for (QuestEntity questEntity : getAll()) {
-            if(questEntity.getUserId().equals(userId)) result.add(questEntity);
+            if(questEntity.getQuestId().equals(userId)) result.add(questEntity);
         }
         return result;
     }

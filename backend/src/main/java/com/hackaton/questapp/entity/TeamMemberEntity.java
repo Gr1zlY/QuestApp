@@ -20,6 +20,12 @@ public class TeamMemberEntity {
 
     private String identifier; // open problem, androidId? IphoneId?
 
+    public TeamMemberEntity(Long memberId, TeamEntity team, String identifier) {
+        this.memberId = memberId;
+        this.team = team;
+        this.identifier = identifier;
+    }
+
     public Long getMemberId() {
         return memberId;
     }

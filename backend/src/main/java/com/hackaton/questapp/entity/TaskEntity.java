@@ -1,6 +1,5 @@
 package com.hackaton.questapp.entity;
 
-import javax.persistence.*;
 import java.util.Arrays;
 
 /**
@@ -18,7 +17,9 @@ public class TaskEntity {
 
     private QuestEntity quest;
 
-    private String textDescription;
+    private String taskName;
+
+    private String description;
 
     private byte[] photo;
 
@@ -28,12 +29,31 @@ public class TaskEntity {
 
     private String solution; // can have ANYTHING
 
+    public TaskEntity(Long taskId, QuestEntity quest,String taskName, String textDescription, byte[] photo, int taskOrdinalNumber, TaskType taskType, String solution) {
+        this.taskId = taskId;
+        this.quest = quest;
+        this.taskName = taskName;
+        this.description = textDescription;
+        this.photo = photo;
+        this.taskOrdinalNumber = taskOrdinalNumber;
+        this.taskType = taskType;
+        this.solution = solution;
+    }
+
     public Long getTaskId() {
         return taskId;
     }
 
     public void setTaskId(Long taskId) {
         this.taskId = taskId;
+    }
+
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
     }
 
     public QuestEntity getQuest() {
@@ -44,12 +64,12 @@ public class TaskEntity {
         this.quest = quest;
     }
 
-    public String getTextDescription() {
-        return textDescription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setTextDescription(String textDescription) {
-        this.textDescription = textDescription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public byte[] getPhoto() {
@@ -106,7 +126,7 @@ public class TaskEntity {
         return "TaskEntity{" +
                 "taskId=" + taskId +
                 ", quest=" + quest +
-                ", textDescription='" + textDescription + '\'' +
+                ", description='" + description + '\'' +
                 ", photo=" + Arrays.toString(photo) +
                 ", taskOrdinalNumber=" + taskOrdinalNumber +
                 '}';

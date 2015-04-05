@@ -1,0 +1,49 @@
+<div class="row mt" ng-cotroller="QuestsListCtrl">
+  <section class="quests-panel">
+    <div class="panel-heading">
+      <div class="pull-left">
+        <h3>Your quests</h3>
+      </div>
+      <div class="pull-right">
+        <form class="search-form" ng-submit="do_search()">
+          <div class="form-group has-feedback">
+            <label for="search" class="sr-only">Search</label>
+            <input type="text" class="form-control" name="search" id="search" placeholder="search" ng-model="search_word">
+            <span class="glyphicon glyphicon-search form-control-feedback"></span>
+          </div>
+        </form>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    <div class="panel-body">
+      <div class="quests-content">
+        <ul class="quest-list">
+          <li ng-repeat="quest in quests">
+            <div class="quest-title">
+              <h4>
+                <span class="quest-title-sp">
+                  {{quest.name}}
+                </span>
+              </h4>
+              <span class="badge bg-important" ng-show="{{1 < 2}}">
+                SOON
+              </span>
+              <div class="pull-right hidden-phone">
+                <button class="btn btn-primary btn-sm" ng-click="editQuest(quest.questId)"><i class="fa fa-pencil"></i></button>
+                <button class="btn btn-danger btn-sm" ng-click="removeQuest(quest.questId)"><i class="fa fa-trash-o "></i></button>
+              </div>
+              <div>
+                {{quest.description}}
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="add-quest-row">
+        <button class="btn btn-success btn-sm pull-left" ng-click="addQuest()">Add New Quest</button>
+        <button class="btn btn-default btn-sm pull-right" ng-click="seeAllQuest()">See All Quests</button>
+      </div>
+    </div>
+  </section>
+</div>

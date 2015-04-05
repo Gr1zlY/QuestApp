@@ -1,0 +1,59 @@
+<div ng-controller="EditQuestCtrl">
+	<section class="quest-panel">
+		<div class="panel-heading">
+			<h3>
+				<span ng-show="quest.questId > 0">Edit </span>
+				<span ng-hide="quest.questId > 0">Add </span>
+				quest
+			</h3>
+		</div>
+		<div class="panel-body">
+			<form class="form-horizontal" ng-submit="editQuest()">
+				<div class="form-group">
+					<label for="title" class="col-sm-2 control-label">Title</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" id="title" placeholder="title" ng-model="quest.name">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="description" class="col-sm-2 control-label">Description</label>
+					<div class="col-sm-10">
+						<textarea class="form-control" id="description" placeholder="Description" rows="5" ng-model="quest.description"></textarea>
+					</div>
+				</div>
+				<div class="form-group" flow-init>
+					<label for="photo" class="col-sm-2 control-label">Photo</label>
+					<div class="col-sm-10">
+						<div class="ng-scope" flow-init="{singleFile:true}" flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]" flow-drop>
+							<div class="thumbnail" ng-show="!$flow.files.length">
+								<img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
+							</div>
+							<div class="thumbnail ng-hide" ng-show="$flow.files.length">
+								<img flow-img="$flow.files[0]">
+							</div>
+							<div>
+								<span class="btn btn-primary" ng-show="!$flow.files.length" flow-btn="">Select image<input style="visibility: hidden; position: absolute;" type="file"></span> <strong>Or Drag And Drop your picture here</strong>
+								<span class="btn btn-info ng-hide" ng-show="$flow.files.length" flow-btn="">Change<input style="visibility: hidden; position: absolute;" type="file"></span>
+								<span class="btn btn-danger ng-hide" ng-show="$flow.files.length" ng-click="$flow.cancel()">
+									Remove
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<h4>Checkpoints:</h4>
+
+			
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10 pull-right">
+					<button type="submit" ng-show="quest.questId > 0" class="btn btn-default">Edit</button>
+					<button type="submit" ng-hide="quest.questId > 0" class="btn btn-default">Create</button>
+				</div>
+			</div>
+
+		</form>
+	</div>
+</section>
+</div>
