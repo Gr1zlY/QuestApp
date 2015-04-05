@@ -1,18 +1,15 @@
 package com.hackaton.questapp.springconfig;
 
 import com.hackaton.questapp.dao.*;
-import com.hackaton.questapp.entity.*;
+import com.hackaton.questapp.entity.QuestEntity;
+import com.hackaton.questapp.entity.TaskEntity;
+import com.hackaton.questapp.entity.TaskType;
 import com.hackaton.questapp.httpfilter.SimpleCORSFilter;
-import com.hackaton.questapp.rest.QuestService;
-import com.hackaton.questapp.rest.QuestStatusService;
-import com.hackaton.questapp.rest.TaskService;
-import com.hackaton.questapp.rest.TeamService;
+import com.hackaton.questapp.rest.*;
 import com.hackaton.questapp.storage.DBStubStorage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
-
-import java.util.Properties;
 
 /**
  * Created by Sheremeta on 04.04.2015.
@@ -20,7 +17,7 @@ import java.util.Properties;
 @Configuration
 public class SpringJavaConfig {
 
-    private static final QuestEntity QUEST_EXAMPLE_ENTITY = new QuestEntity(1L,"ugly quest","The most ugliest quest you will ever see",
+    private static final QuestEntity QUEST_EXAMPLE_ENTITY = new QuestEntity(1L,"Hackaton quest!","First quest, that can be completed while presentating this app!",
                                                                                    null,null,System.currentTimeMillis());
 
     private static final QuestEntity QUEST_EXAMPLE_SECOND = new QuestEntity(2L,"pretty quest","Not the best, but better than the others",
@@ -39,7 +36,7 @@ public class SpringJavaConfig {
         QuestService service = new QuestService();
         service.setQuestDao(questDao());
         service.setTeamMemberDao(teamMemberDao());
-        //service.setOrganizatorDao(ograni);
+        service.setOrganizatorDao(organizatorDao());
         return service;
     }
 
@@ -59,6 +56,7 @@ public class SpringJavaConfig {
         taskService.setTeamMemberDao(teamMemberDao());
         taskService.setQuestStatusDao(questStatusDao());
         taskService.setTaskDao(taskDao());
+        taskService.setQuestDao(questDao());
         return taskService;
     }
 
@@ -68,6 +66,19 @@ public class SpringJavaConfig {
         questStatusService.setTeamMemberDao(teamMemberDao());
         questStatusService.setQuestStatusDao(questStatusDao());
         return questStatusService;
+    }
+
+    @Bean
+    public OrganizatorService organizatorService(){
+        OrganizatorService service = new OrganizatorService();
+        service.setOrganizatorDao(organizatorDao());
+        return service;
+    }
+
+    private OrganizatorDao organizatorDao() {
+        OrganizatorDao dao = new OrganizatorDao();
+        dao.setStorage(dbStubStorage());
+        return dao;
     }
 
     @Bean
