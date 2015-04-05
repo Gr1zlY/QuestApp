@@ -3,15 +3,16 @@ package com.hackaton.questapp.rest;
 import com.hackaton.questapp.dao.OrganizatorDao;
 import com.hackaton.questapp.dao.QuestDao;
 import com.hackaton.questapp.dao.TeamMemberDao;
-import com.hackaton.questapp.entity.*;
-
+import com.hackaton.questapp.entity.QuestEntity;
+import com.hackaton.questapp.entity.Status;
+import com.hackaton.questapp.entity.TeamEntity;
+import com.hackaton.questapp.entity.TeamMemberEntity;
 import org.apache.xmlbeans.impl.util.Base64;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -45,7 +46,7 @@ public class QuestService {
         return team.getQuest();
     }
 
-    @RequestMapping(value = "/addNewQuest", headers = "Accept=application/json", method = RequestMethod.PUT)
+    @RequestMapping(value = "/addNewQuest", headers = "Accept=application/json", method = RequestMethod.POST)
     public void insertNewQuest(@RequestParam String name, @RequestParam String description,@RequestParam String photo,
                                @RequestParam Long userId, @RequestParam Long time){
         QuestEntity questEntity = new QuestEntity(System.currentTimeMillis(),name,description,
@@ -54,7 +55,7 @@ public class QuestService {
 
     }
 
-     @RequestMapping(value="/removeQuestById", headers = "Accept=application/json", method = RequestMethod.DELETE)
+     @RequestMapping(value="/removeQuestById", headers = "Accept=application/json", method = RequestMethod.POST)
      public Status removeQuestByQuestId(@RequestParam Long questId){
         questDao.removeById(questId);
         return new Status("OK");

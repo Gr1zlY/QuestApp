@@ -107,6 +107,17 @@ public class TaskService {
         return new Status("OK");
     }
 
+    @RequestMapping(value = "/getTaskById", headers = "Accept=application/json", method = RequestMethod.GET)
+    public TaskEntityForClientDTO getTaskById(@RequestParam String deviceId, @RequestParam Long taskId){
+        TaskEntityForClientDTO taskEntity = new TaskEntityForClientDTO(taskDao.getById(taskId));
+        TeamMemberEntity teamMember = teamMemberDao.getTeamMemberById(deviceId);
+        TeamEntity team = teamMember.getTeam();
+        if( team == null ) return null;
+        QuestStatusEntity status = questStatusDao.getByTeam(team);
+        taskEntity.setSolved(status.getTasksCompleted() >= taskEntity.getTaskOrdinalNumber());
+        return taskEntity;
+    }
+
     public void setTeamMemberDao(TeamMemberDao teamMemberDao) {
         this.teamMemberDao = teamMemberDao;
     }
