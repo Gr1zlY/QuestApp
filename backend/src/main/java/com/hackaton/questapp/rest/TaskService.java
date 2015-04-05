@@ -42,20 +42,22 @@ public class TaskService {
     }
 
     @RequestMapping(value = "/getAvailableTasks", headers = "Accept=application/json")
-    public List<TaskEntity> getAvailableQuests(@RequestParam String deviceId){
-        List<TaskEntity> result = Lists.newArrayList();
+    public List<TaskEntityForClientDTO> getAvailableQuests(@RequestParam String deviceId){
+        List<TaskEntityForClientDTO> result = Lists.newArrayList();
         TeamMemberEntity teamMember = teamMemberDao.getTeamMemberById(deviceId);
         if(teamMember == null) return null;
         TeamEntity team = teamMember.getTeam();
         QuestStatusEntity status = questStatusDao.getByTeam(team);
         for(int i = 1;i<=status.getTasksCompleted()+1;i++){
-            result.add(taskDao.getTaskByNumberAndQuestId(i,team.getQuest().getQuestId()));
+            TaskEntityForClientDTO dto = new TaskEntityForClientDTO(taskDao.getTaskByNumberAndQuestId(i,team.getQuest().getQuestId()));
+            dto.setSolved(i <= status.getTasksCompleted());
+            result.add(dto);
         }
         return result;
     }
 
     @RequestMapping(value = "/attemptSolution", headers = "Accept=application/json")
-    public Status attemptSolution(@RequestParam String solutionCandidate,@RequestParam Long taskId,
+    public Object attemptSolution(@RequestParam String solutionCandidate,@RequestParam Long taskId,
                                   @RequestParam String deviceId) throws JSONException {
         TaskEntity taskEntity = taskDao.getById(taskId);
         TeamMemberEntity teamMember = teamMemberDao.getTeamMemberById(deviceId);
@@ -64,7 +66,7 @@ public class TaskService {
             QuestStatusEntity questStatusEntity = questStatusDao.getByTeam(team);
             if(questStatusEntity.getTasksCompleted() != taskEntity.getTaskOrdinalNumber() - 1) return new Status("WRONG TASK ATTEMPTED");
             questStatusEntity.setTasksCompleted(questStatusEntity.getTasksCompleted() + 1);
-            return new Status("OK");
+            return getLatestAvialableTask(deviceId);
         } else {
             return new Status("WRONG");
         }
@@ -75,7 +77,7 @@ public class TaskService {
         return taskDao.getTasksByQuestId(questId);
     }
 
-    @RequestMapping(value = "/insertTask", headers = "Accept=application/json", method = RequestMethod.PUT)
+    @RequestMapping(value = "/insertTask", headers = "Accept=application/json", method = RequestMethod.POST)
     public Status insertTask(@RequestParam Long questId,@RequestParam String name, @RequestParam String description, @RequestParam String photo,
                              @RequestParam int ordinalNumber,@RequestParam String taskType, @RequestParam String solution){
 
@@ -85,13 +87,13 @@ public class TaskService {
         return new Status("OK");
     }
 
-    @RequestMapping(value = "/removeTaskByTaskId", headers = "Accept=application/json", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/removeTaskByTaskId", headers = "Accept=application/json", method = RequestMethod.POST)
     public Status removeTaskByTaskId(@RequestParam Long taskId){
         taskDao.removeByTaskId(taskId);
         return new Status("OK");
     }
 
-    @RequestMapping(value = "/updateTask", headers = "Accept=application/json", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/updateTask", headers = "Accept=application/json", method = RequestMethod.POST)
     public Status updateTaskByTaskId(@RequestParam Long taskId,@RequestParam String name, @RequestParam String description, @RequestParam String photo,
                                      @RequestParam int ordinalNumber,@RequestParam String taskType, @RequestParam String solution){
          TaskEntity taskEntity = taskDao.getById(taskId);
