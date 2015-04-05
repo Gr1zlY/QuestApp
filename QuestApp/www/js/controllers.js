@@ -6,7 +6,7 @@ angular.module('quest.controllers', [])
     
     $scope.refreshdata = function(){
 
-        $http.get("http://192.168.20.38:8087/getQuests").then(
+        $http.get("http://filetransfereasyaspie.com:8095/getQuests").then(
             function(responce){
                 $scope.quests = responce.data;
             },
@@ -38,7 +38,7 @@ angular.module('quest.controllers', [])
 
     $scope.refreshdata = function(){
 
-        $http.get("http://192.168.20.38:8087/getTeams", {params: {"questId":questId}}).then(
+        $http.get("http://filetransfereasyaspie.com:8095/getTeams", {params: {"questId":questId}}).then(
             function(responce){
                 console.log(responce);
                 $scope.teams = responce.data;
@@ -67,12 +67,12 @@ angular.module('quest.controllers', [])
     if(typeof device !== 'undefined'){
         deviceId = device.uuid;
     } else {
-        deviceId = 'browser';
+        deviceId = 'browser1';
     }
 
     $scope.teamselected = function(teamId){
 
-        $http.get("http://192.168.20.38:8087/joinTeam", {params: {"teamId":teamId, "deviceId": deviceId}}).then(
+        $http.get("http://filetransfereasyaspie.com:8095/joinTeam", {params: {"teamId":teamId, "deviceId": deviceId}}).then(
             function(responce){
                 $state.go("questinfo", {});
             },
@@ -97,7 +97,7 @@ angular.module('quest.controllers', [])
                             e.preventDefault();
                         } else {
                             $http({
-                                url: "http://192.168.20.38:8087/createTeam",
+                                url: "http://filetransfereasyaspie.com:8095/createTeam",
                                 type: "GET",
                                 params: {"questId":questId, "deviceId" : deviceId, "name": $scope.team.name}
                             }).then(
@@ -127,20 +127,28 @@ angular.module('quest.controllers', [])
     if(typeof device !== 'undefined'){
         deviceId = device.uuid;
     } else {
-        deviceId = 'browser';
+        deviceId = 'browser1';
     }
+    $scope.deviceId = deviceId;
 
     $scope.quest = {};
-
-    $scope.quest.tasks = [
-        {taskId: 1, name: "mastrubate", status: true},
-        {taskId: 2, name: "mastrubate more", status: false}
-    ];
+    $scope.tasks = [];
+        //{taskId: 1, name: "mastrubate", status: true},
+        //{taskId: 2, name: "mastrubate more", status: false}
 
     $scope.refreshdata = function(){
-        $http.get("http://192.168.20.38:8087/getQuestByDeviceId", {params: {"deviceId":deviceId}}).then(
-            function(responce){
-                $scope.quest = responce.data;
+        $http.get("http://filetransfereasyaspie.com:8095/getQuestByDeviceId", {params: {"deviceId":deviceId}}).then(
+            function(response){
+                $scope.quest = response.data;
+            },
+            function(error){
+                console.log(error);
+            }
+        );
+
+        $http.get("http://filetransfereasyaspie.com:8095/getAvailableTasks", {params: {"deviceId":deviceId}}).then(
+            function(response){
+                $scope.tasks = response.data;
             },
             function(error){
                 console.log(error);
@@ -154,6 +162,15 @@ angular.module('quest.controllers', [])
 .controller('TaskInfoCtrl', ['$scope', '$stateParams', '$ionicLoading', '$ionicPopup', function($scope, $stateParams, $ionicLoading, $ionicPopup) {
 
     console.log($stateParams.taskId);
+
+    //TODO: creanup
+    var deviceId = '';
+    if(typeof device !== 'undefined'){
+        deviceId = device.uuid;
+    } else {
+        deviceId = 'browser1';
+    }
+    $scope.deviceId = deviceId;
 
     $scope.task = {taskId: 2, name: 'Task 1', description: 'asdfasdfasdf', photo: null, status: false};
 
@@ -206,7 +223,7 @@ angular.module('quest.controllers', [])
             );    
     }
 
-    $scope.str.solution = {};
+    $scope.str = {};
     $scope.enterstring = function(){
         var solutionPopup = $ionicPopup.show({
             template: '<input type="text" ng-model="str.solution" />',
