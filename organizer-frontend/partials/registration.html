@@ -1,9 +1,9 @@
 <div class="wrapper" ng-cotroller="RegistrationCtrl">
-	<form class="form-registration">
-		<h2 class="form-registration-heading">Please enter login and pass</h2>
-		<input type="text" class="form-control" name="username" placeholder="Email Address" required="" autofocus="" value="{{login}}" />
-		<input type="password" class="form-control" name="password" placeholder="Password" required="" value="{{pass}}" />
-		<input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password" required="" value="{{confirm_pass}}" />
-		<button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="register()">Register me</button>
+	<form class="form-registration" ng-submit="register()">
+		<h2 class="form-registration-heading">Please enter your data</h2>
+		<input type="text" class="form-control" name="username" placeholder="Email Address" required autofocus ng-model="login" />
+		<input type="password" class="form-control" name="password" id="password" placeholder="Password" required ng-model="pass" />
+		<input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required ng-model="confirm_pass" />
+		<button class="btn btn-lg btn-primary btn-block" type="submit">Register me</button>
 	</form>
 </div>

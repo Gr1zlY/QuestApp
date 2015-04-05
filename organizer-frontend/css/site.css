@@ -77,3 +77,28 @@ a, a:hover, a:focus {
 .badge.bg-inverse {
 	background: #2A3542;
 }
+
+.panel-heading {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+small {
+	font-size: 12px !important;
+}
+
+#YMapsID {
+	width: 500px;
+	height: 400px;
+}
+
+.hero-unit p {
+	line-height: 20px;
+}
+
+.cross-control {
+	background: url(center.gif) no-repeat;
+	position: absolute;
+	width: 16px;
+	height: 16px;
+}
