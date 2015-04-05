@@ -66,7 +66,7 @@ public class TaskService {
             QuestStatusEntity questStatusEntity = questStatusDao.getByTeam(team);
             if(questStatusEntity.getTasksCompleted() != taskEntity.getTaskOrdinalNumber() - 1) return new Status("WRONG TASK ATTEMPTED");
             questStatusEntity.setTasksCompleted(questStatusEntity.getTasksCompleted() + 1);
-            return getLatestAvialableTask(deviceId);
+            return new TaskStatusEntity("Completed",getLatestAvialableTask(deviceId).getTaskId());
         } else {
             return new Status("WRONG");
         }
