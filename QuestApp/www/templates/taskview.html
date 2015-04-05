@@ -1,0 +1,34 @@
+<ion-view view-title="Task">
+
+    <ion-nav-title class="bar-stable">
+        <h1 class="title">Task</h1>
+    </ion-nav-title>
+    <ion-nav-buttons side="right">
+        <button class="button button-icon button-clear ion-loop" ng-click="refreshdata()">
+        </button>
+    </ion-nav-buttons>
+
+    <ion-content padding="true">
+
+        <div class="row">
+            <div class="col">
+                <img src="{{task.photo}}">
+            </div>
+            <div class="col col-75">
+                <h2>{{ task.taskName }}</h2>
+                <p>{{ task.description }}</p>
+            </div>
+        </div>
+
+        <div class="button-bar" ng-hide="task.status">
+            <a class="button" ng-click="getlocation()"><i class="icon ion-location"></i></a>
+            <a class="button" ng-click="scanqrcode()"><i class="icon ion-qr-scanner"></i></a>
+            <a class="button" ng-click="enterstring()"><i class="icon ion-edit"></i></a>
+        </div>
+
+        <div class="button button-block button-balanced" ng-show="task.status">
+            Task completed
+        </div>
+
+    </ion-content>
+</ion-view>

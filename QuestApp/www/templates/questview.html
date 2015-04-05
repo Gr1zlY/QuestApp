@@ -1,0 +1,32 @@
+<ion-view view-title="Quest">
+
+    <ion-nav-title class="bar-stable">
+        <h1 class="title">Quest</h1>
+    </ion-nav-title>
+    <ion-nav-buttons side="right">
+        <button class="button button-icon button-clear ion-loop" ng-click="refreshdata()">
+        </button>
+    </ion-nav-buttons>
+
+    <ion-content>
+
+        <div class="row">
+            <div class="col">
+                <img src="{{quest.photo}}">
+            </div>
+            <div class="col col-75">
+                <h2>{{ quest.name }}</h2>
+                <p>{{ quest.description }}</p>
+            </div>
+        </div>
+
+        <div class="list list-inset">
+            <div class="item item-icon-left item-icon-right" ng-repeat="item in tasks" ui-sref="taskinfo({taskId: item.taskId, deviceId: deviceId})">
+                <i class="icon ion-ionic"></i>
+                {{ item.taskName }}
+                <i class="icon" ng-class="item.status? 'ion-checkmark' : 'ion-help'"></i>
+            </div>
+        </div>
+
+    </ion-content>
+</ion-view>
