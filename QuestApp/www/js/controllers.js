@@ -6,7 +6,7 @@ angular.module('quest.controllers', [])
     
     $scope.refreshdata = function(){
 
-        $http.get("http://filetransfereasyaspie.com:8095/getQuests").then(
+        $http.get("http://filetransfereasyaspie.com:8087/getQuests").then(
             function(responce){
                 $scope.quests = responce.data;
             },
@@ -38,7 +38,7 @@ angular.module('quest.controllers', [])
 
     $scope.refreshdata = function(){
 
-        $http.get("http://filetransfereasyaspie.com:8095/getTeams", {params: {"questId":questId}}).then(
+        $http.get("http://filetransfereasyaspie.com:8087/getTeams", {params: {"questId":questId}}).then(
             function(responce){
                 console.log(responce);
                 $scope.teams = responce.data;
@@ -72,7 +72,7 @@ angular.module('quest.controllers', [])
 
     $scope.teamselected = function(teamId){
 
-        $http.get("http://filetransfereasyaspie.com:8095/joinTeam", {params: {"teamId":teamId, "deviceId": deviceId}}).then(
+        $http.get("http://filetransfereasyaspie.com:8087/joinTeam", {params: {"teamId":teamId, "deviceId": deviceId}}).then(
             function(responce){
                 $state.go("questinfo", {});
             },
@@ -97,7 +97,7 @@ angular.module('quest.controllers', [])
                             e.preventDefault();
                         } else {
                             $http({
-                                url: "http://filetransfereasyaspie.com:8095/createTeam",
+                                url: "http://filetransfereasyaspie.com:8087/createTeam",
                                 type: "GET",
                                 params: {"questId":questId, "deviceId" : deviceId, "name": $scope.team.name}
                             }).then(
@@ -133,11 +133,9 @@ angular.module('quest.controllers', [])
 
     $scope.quest = {};
     $scope.tasks = [];
-        //{taskId: 1, name: "mastrubate", status: true},
-        //{taskId: 2, name: "mastrubate more", status: false}
 
     $scope.refreshdata = function(){
-        $http.get("http://filetransfereasyaspie.com:8095/getQuestByDeviceId", {params: {"deviceId":deviceId}}).then(
+        $http.get("http://filetransfereasyaspie.com:8087/getQuestByDeviceId", {params: {"deviceId":deviceId}}).then(
             function(response){
                 $scope.quest = response.data;
             },
@@ -146,7 +144,7 @@ angular.module('quest.controllers', [])
             }
         );
 
-        $http.get("http://filetransfereasyaspie.com:8095/getAvailableTasks", {params: {"deviceId":deviceId}}).then(
+        $http.get("http://filetransfereasyaspie.com:8087/getAvailableTasks", {params: {"deviceId":deviceId}}).then(
             function(response){
                 $scope.tasks = response.data;
             },
@@ -159,9 +157,9 @@ angular.module('quest.controllers', [])
     $scope.refreshdata();
 }])
 
-.controller('TaskInfoCtrl', ['$scope', '$stateParams', '$ionicLoading', '$ionicPopup', function($scope, $stateParams, $ionicLoading, $ionicPopup) {
+.controller('TaskInfoCtrl', ['$scope', '$state', '$stateParams', '$http', '$ionicLoading', '$ionicPopup', function($scope, $state, $stateParams, $http, $ionicLoading, $ionicPopup) {
 
-    console.log($stateParams.taskId);
+    var taskId = $stateParams.taskId;
 
     //TODO: creanup
     var deviceId = '';
@@ -172,9 +170,27 @@ angular.module('quest.controllers', [])
     }
     $scope.deviceId = deviceId;
 
-    $scope.task = {taskId: 2, name: 'Task 1', description: 'asdfasdfasdf', photo: null, status: false};
-
+    $scope.task = {};
     $scope.refreshdata = function(){
+
+        $http.get("http://filetransfereasyaspie.com:8087/getTaskById", { params: { "deviceId":deviceId, "taskId": taskId } }).then(
+            function(responce){
+                $scope.task = responce.data;
+            },
+            function(error){
+
+                var confirmPopup = $ionicPopup.confirm({
+                    title: 'Network Error',
+                    template: 'Try again?'
+                });
+
+                confirmPopup.then(function(res){
+                    if(res){
+                        $scope.refreshdata();
+                    }
+                });
+            }
+        );
     
     }
 
@@ -189,16 +205,48 @@ angular.module('quest.controllers', [])
     }
     
     var submit = function(value){
-        //$scope.loading();
+        $scope.loading();
 
-        /*$http.get("http://192.168.20.38:8087/getQuestByDeviceId", {params: {"deviceId":deviceId}}).then(
+        $http.get("http://filetransfereasyaspie.com:8087/attemptSolution", { params: { "deviceId":deviceId, "solutionCandidate": value, "taskId": taskId } }).then(
             function(responce){
-                $scope.quest = responce.data;
+
+                var result = responce.data;
+
+                $scope.endloading();
+
+                if(result.status.localeCompare("WRONG") == 0){
+                    var alertBox = $ionicPopup.alert({
+                        title: 'Wrong answer',
+                        template: 'Search for another solution'
+                    });
+                } else {
+                    var alertBox = $ionicPopup.alert({
+                        title: 'Corrent solution',
+                        template: '<i class="icon ion-checkmark"></i> Great'
+                    });
+
+                    alertBox.then(function(){
+                        $state.go("taskinfo", {'taskId': result.nextTask});
+                    });
+
+                }
+
             },
             function(error){
-                console.log(error);
+                $scope.endloading();
+
+                var confirmPopup = $ionicPopup.confirm({
+                    title: 'Network Error',
+                    template: 'Try again?'
+                });
+
+                confirmPopup.then(function(res){
+                    if(res){
+                        submit(value);
+                    }
+                });
             }
-        );*/
+        );
     }
 
     $scope.getlocation = function(){
@@ -238,6 +286,7 @@ angular.module('quest.controllers', [])
                             e.preventDefault();
                         } else {
                             submit({type: "string", data: $scope.str.solution});
+                            return $scope.str.solution;
                         }
                     }
                 }
