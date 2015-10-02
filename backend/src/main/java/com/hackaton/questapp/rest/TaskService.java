@@ -66,7 +66,7 @@ public class TaskService {
         TaskEntity taskEntity = taskDao.getById(taskId);
         TeamMemberEntity teamMember = teamMemberDao.getTeamMemberById(deviceId);
         if( StringUtils.equalsIgnoreCase(taskEntity.getSolution(),solutionCandidate)){ // trim here
-            QuestStatusEntity questStatusEntity = questStatusDao.getByTeam(team);
+            QuestStatusEntity questStatusEntity = questStatusDao.getByTeam(teamMember.getTeam());
             if(questStatusEntity.getTasksCompleted() != taskEntity.getTaskOrdinalNumber() - 1) return new Status("WRONG TASK ATTEMPTED");
             questStatusEntity.setTasksCompleted(questStatusEntity.getTasksCompleted() + 1);
             return new TaskStatusEntity("Completed",getLatestAvialableTask(deviceId).getTaskId());
